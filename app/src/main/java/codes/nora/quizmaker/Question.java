@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Question implements Serializable {
     public String title = "";
     public String description = "";
-    private ArrayList<Answer> answers = new ArrayList<Answer>();
+    public ArrayList<Answer> answers = new ArrayList<Answer>();
     private double max_score = 0;
     private boolean is_free_response = false;
 
