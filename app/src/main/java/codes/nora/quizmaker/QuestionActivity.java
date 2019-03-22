@@ -1,6 +1,7 @@
 package codes.nora.quizmaker;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class QuestionActivity extends AppCompatActivity {
+    public static final String KEY_EXTRA = "codes.nora.quizmaker.QUESTION_DATA";
 
     private Button btnSubmit;
     private TextView questionName;
@@ -22,6 +24,7 @@ public class QuestionActivity extends AppCompatActivity {
     private EditText answerEditText;
     private RadioGroup answerRadioGroup;
     private ArrayList<RadioButton> answerRadioButtons;
+    private QuizState s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +37,41 @@ public class QuestionActivity extends AppCompatActivity {
         this.answerEditText = findViewById(R.id.answerEditText);
         this.answerRadioGroup = findViewById(R.id.radioGroup);
 
-        Question q1 = new Question("Test Question 1", "This is a test.");
-        q1.add_answer(new Answer("Wrong answer one"));
-        q1.add_answer(new Answer("Right answer!", 1.0));
-        q1.add_answer(new Answer("Partial credit.", 0.5));
-        populateViewFrom(q1);
+        s = QuizState.from_intent(getIntent(), KEY_EXTRA);
+        final Question q = s.current_question();
+        populateViewFrom(q);
+    }
+
+    public void onSubmitPress(View v) {
+        Question q = this.s.current_question();
+        if (q.is_free_response()) {
+            s.submit_answer(answerEditText.getText().toString());
+        } else {
+            if (answerRadioGroup.getCheckedRadioButtonId() != -1) {
+                RadioButton r = findViewById(answerRadioGroup.getCheckedRadioButtonId());
+                s.submit_answer(r.getText().toString());
+            } else {
+                // In the case that no option was selected, do nothing.
+                return;
+            }
+        }
+
+        Intent i = new Intent(v.getContext(), QuestionActivity.class);
+        s.into_intent(i, QuestionActivity.KEY_EXTRA);
+        v.getContext().startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (s.is_at_start()) {
+            Intent i = new Intent(this, StartingPage.class);
+            startActivity(i);
+        } else {
+            s.backtrack();
+            Intent i = new Intent(this, QuestionActivity.class);
+            s.into_intent(i, QuestionActivity.KEY_EXTRA);
+            startActivity(i);
+        }
     }
 
     private void populateViewFrom(Question q) {

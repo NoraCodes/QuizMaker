@@ -1,5 +1,6 @@
 package codes.nora.quizmaker;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.io.Serializable;
@@ -56,6 +57,20 @@ public class QuizState implements Serializable {
     }
 
     /**
+     * Go back one question.
+     * @throws ArrayIndexOutOfBoundsException when trying to backtrack when off
+     * the beginning of the answer array.
+     */
+    public void backtrack() {
+        // Preemptively check if we are off the beginning of the array
+        if (questions == null || current_question_number >= questions.size()) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        answers[current_question_number] = null;
+        current_question_number -= 1;
+    }
+
+    /**
      * Return the current question, or null if there are no more questions to
      * be answered.
      */
@@ -76,20 +91,50 @@ public class QuizState implements Serializable {
     }
 
     /**
-     * Save this QuizState into a Bundle.
-     * @param b the bundle to use
+     * Check whether the quiz is at the beginning or not.
+     * @return true if there are no questions prior to this one
      */
-    public void into_bundle(Bundle b) {
-        b.putSerializable("quizState", this);
+    public boolean is_at_start() {
+        return questions == null || current_question_number == 0;
+    }
+
+    /**
+     * Save this QuizState into a Bundle.
+     * @param b the Bundle to use
+     * @param key the key to save into
+     */
+    public void into_bundle(Bundle b, String key) {
+        b.putSerializable(key, this);
+    }
+
+    /**
+     * Save this QuizState into an Intent.
+     * @param i the Intent to use
+     * @param key the key to save into
+     */
+    public void into_intent(Intent i, String key) {
+        i.putExtra(key, this);
     }
 
     /**
      * Reconstruct a QuizState from a Bundle.
      * @param b the bundle to use
+     * @param k the key to reconstitute from
      * @return The reconstructed QuizState or null if no QuizState was saved
      * into the bundle
      */
-    public static QuizState from_bundle(Bundle b) {
-        return (QuizState) b.getSerializable("quizState");
+    public static QuizState from_bundle(Bundle b, String k) {
+        return (QuizState) b.getSerializable(k);
+    }
+
+    /**
+     * Reconstruct a QuizState from an Intent.
+     * @param i the Intent to use
+     * @param k the key to reconstitute from
+     * @return The reconstructed QuizState or null if no QuizState was saved
+     * into the Intent
+     */
+    public static QuizState from_intent(Intent i, String k) {
+        return (QuizState) i.getSerializableExtra(k);
     }
 }
