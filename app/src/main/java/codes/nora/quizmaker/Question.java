@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * Represents an answerable question.
  */
 public class Question implements Serializable {
-    private String title = "";
-    private String description = "";
+    public String title = "";
+    public String description = "";
     private ArrayList<Answer> answers = new ArrayList<Answer>();
     private double max_score = 0;
     private boolean is_free_response = false;

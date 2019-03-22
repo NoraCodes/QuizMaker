@@ -1,21 +1,13 @@
 <resources>
-    <string name="app_name">CSCI 270 Homework Assignment 3</string>
+    <string name="app_name">QuizTaker</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_back">Prev</string>
     <string name="QuizTitle">CSCI 270 Quiz 1</string>
-    <string name="btn_next"><![CDATA[Next -->]]></string>
-    <string name="btn_back"><![CDATA[<-- Back]]></string>
-    <string name="rdb_a" />
-    <string name="rdb_b" />
-    <string name="rdb_c" />
-    <string name="rdb_d" />
-    <string name="answer_box" />
-    <string name="question_name" />
-    <string name="question_info" />
     <string name="submit_btn">Submit</string>
-    <string name="score_txt" />
     <string name="title_activity_end_page">EndPage</string>
-    <string name="percent_txt" />
     <string name="redo_btn">Retry?</string>
     <string name="title_txt">Final Results:</string>
-    <string name="title_activity_starting_page">StartingPage</string>
+    <string name="title_activity_starting_page">QuizTaker</string>
     <string name="start_btn">Start the Quiz!</string>
+    <string name="start_page_text">Here is the start page. When we do the midterm, it will serve a real purpose.</string>
 </resources>

@@ -11,18 +11,19 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".StartingPage"
-            android:label="@string/title_activity_starting_page"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_starting_page">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".EndPage"
             android:label="@string/title_activity_end_page"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".MainActivity"
+            android:label="@string/title_activity_end_page"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
