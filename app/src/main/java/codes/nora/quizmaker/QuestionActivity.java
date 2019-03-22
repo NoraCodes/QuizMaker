@@ -3,16 +3,13 @@ package codes.nora.quizmaker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class QuestionActivity extends AppCompatActivity {
 
-    private Button btnNext;
-    private Button btnBack;
     private Button btnSubmit;
     private TextView questionName;
     private TextView questionText;
@@ -21,9 +18,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        this.btnNext = findViewById(R.id.btn_next);
-        this.btnBack = findViewById(R.id.btn_back);
+        setContentView(R.layout.activity_question);
         this.btnSubmit = findViewById(R.id.submit_btn);
         this.questionName = findViewById(R.id.question_name);
         this.questionText = findViewById(R.id.question_info);
