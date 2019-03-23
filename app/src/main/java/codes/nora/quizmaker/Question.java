@@ -24,6 +24,25 @@ public class Question implements Serializable {
     }
 
     /**
+     * Create a new Question representing a true/false decision.
+     * @param title the question's title
+     * @param description the question
+     * @param correct_answer the right answer to the question
+     * @param score how much the right answer is worth
+     */
+    public Question(String title, String description, boolean correct_answer, double score) {
+        this.title = title;
+        this.description = description;
+        if (correct_answer == true) {
+            this.answers.add(new Answer("True", score));
+            this.answers.add(new Answer("False", 0.0));
+        } else {
+            this.answers.add(new Answer("True", 0.0));
+            this.answers.add(new Answer("False", score));
+        }
+    }
+
+    /**
      * Currently does nothing. Eventually will load questions, either from SQLite
      * or from XML.
      * @return nothing
@@ -57,6 +76,10 @@ public class Question implements Serializable {
         if (answer.score > this.max_score) {
             this.max_score = answer.score;
         }
+    }
+
+    public void add_answer(String answer, double score) {
+        this.add_answer(new Answer(answer, score));
     }
 
     /**
