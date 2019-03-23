@@ -25,6 +25,7 @@ public class StartingPage extends AppCompatActivity {
         questions.add(q1);
 
         Question q2 = new Question("Test Question 2", "This is a test.\nwrong, right, part.");
+        q2.set_free_response();
         q2.add_answer(new Answer("wrong"));
         q2.add_answer(new Answer("right", 1.0));
         q2.add_answer(new Answer("part", 0.5));

@@ -31,6 +31,30 @@ public class QuizState implements Serializable {
     }
 
     /**
+     * Compute the total possible score for this quiz.
+     */
+    public double max_score() {
+        double score = 0;
+        for (Question q: questions) {
+            score += q.best_answer().score;
+        }
+        return score;
+    }
+
+    /**
+     * Compute the current score, counting unanswered questions as zeros.
+     */
+    public double current_score() {
+        double score = 0;
+        for (Answer a: answers) {
+            if (a != null) {
+                score += a.score;
+            }
+        }
+        return score;
+    }
+
+    /**
      * Submit the given string as an answer to the current question and
      * auto-advances to the next question.
      * @param answer the string corresponding to the answer given

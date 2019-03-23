@@ -4,6 +4,7 @@ package codes.nora.quizmaker;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +40,10 @@ public class QuestionActivity extends AppCompatActivity {
 
         s = QuizState.from_intent(getIntent(), KEY_EXTRA);
         final Question q = s.current_question();
+        if (q == null) {
+            Log.e("onCreate Question", String.format("Null current_question"));
+            return;
+        }
         populateViewFrom(q);
     }
 
@@ -56,9 +61,15 @@ public class QuestionActivity extends AppCompatActivity {
             }
         }
 
-        Intent i = new Intent(v.getContext(), QuestionActivity.class);
-        s.into_intent(i, QuestionActivity.KEY_EXTRA);
-        v.getContext().startActivity(i);
+        if (s.is_at_end()) {
+            Intent i = new Intent(v.getContext(), EndPage.class);
+            s.into_intent(i, EndPage.KEY_EXTRA);
+            v.getContext().startActivity(i);
+        } else {
+            Intent i = new Intent(v.getContext(), QuestionActivity.class);
+            s.into_intent(i, QuestionActivity.KEY_EXTRA);
+            v.getContext().startActivity(i);
+        }
     }
 
     @Override
