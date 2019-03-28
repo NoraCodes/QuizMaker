@@ -53,8 +53,7 @@ public class QuestionActivity extends AppCompatActivity {
                 RadioButton r = findViewById(answerRadioGroup.getCheckedRadioButtonId());
                 s.submit_answer(r.getText().toString());
             } else {
-                // In the case that no option was selected, do nothing.
-                return;
+                s.submit_answer("");
             }
         }
 
