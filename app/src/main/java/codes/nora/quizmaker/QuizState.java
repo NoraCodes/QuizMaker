@@ -23,7 +23,6 @@ public class QuizState implements Serializable {
 
     public QuizState() {
         this.questions = new ArrayList<Question>();
-
         {
             Question q = new Question("Question 1", "An Android device created by Samsung may have a different UI than an Android device created by LG", true, 0.25);
             this.questions.add(q);

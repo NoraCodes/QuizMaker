@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">QuizTaker</string>
+    <string name="app_name">QuizMaker</string>
     <string name="btn_next">Next</string>
     <string name="btn_back">Prev</string>
-    <string name="QuizTitle">CSCI 270 Quiz 1</string>
+    <string name="QuizTitle">QuizMaker</string>
     <string name="submit_btn">Submit</string>
     <string name="title_activity_end_page">EndPage</string>
     <string name="redo_btn">Retry?</string>

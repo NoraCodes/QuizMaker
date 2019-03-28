@@ -1,9 +1,8 @@
 package codes.nora.quizmaker;
 
-
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +11,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class QuestionActivity extends AppCompatActivity {
@@ -24,7 +22,6 @@ public class QuestionActivity extends AppCompatActivity {
     private TextView questionScore;
     private EditText answerEditText;
     private RadioGroup answerRadioGroup;
-    private ArrayList<RadioButton> answerRadioButtons;
     private QuizState s;
 
     @Override
@@ -97,11 +94,9 @@ public class QuestionActivity extends AppCompatActivity {
             answerRadioGroup.setVisibility(View.VISIBLE);
             answerEditText.setVisibility(View.GONE);
 
-            this.answerRadioButtons = new ArrayList<>();
             for (Answer a: q.answers) {
                 RadioButton r = new RadioButton(this);
                 r.setText(a.text);
-                answerRadioButtons.add(r);
                 answerRadioGroup.addView(r);
             }
         }
