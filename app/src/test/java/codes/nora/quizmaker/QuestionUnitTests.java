@@ -11,6 +11,12 @@ import static org.junit.Assert.*;
  */
 public class QuestionUnitTests {
     @Test
+    public void new_is_at_end() {
+        QuizState s = new QuizState();
+        assert(s.is_at_end());
+    }
+
+    @Test
     public void checking_answers() {
         Question q = new Question("Test Question", "This is a test.");
         q.add_answer(new Answer("Wrong answer one"));

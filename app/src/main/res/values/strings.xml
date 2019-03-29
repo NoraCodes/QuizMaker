@@ -9,6 +9,7 @@
     <string name="title_txt">Final Results:</string>
     <string name="title_activity_starting_page">QuizTaker</string>
     <string name="start_btn">Start the Quiz!</string>
-    <string name="start_page_text">Here is the start page. When we do the midterm, it will serve a real purpose.</string>
+    <string name="edit_btn">Edit the Quiz!</string>
+    <string name="start_page_text">Press the top button to take the quiz, or the bottom button to edit the quiz data.</string>
     <string name="ScoreTitle">Score</string>
 </resources>
