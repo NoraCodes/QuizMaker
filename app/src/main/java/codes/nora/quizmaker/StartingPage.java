@@ -21,6 +21,7 @@ public class StartingPage extends AppCompatActivity {
         setContentView(R.layout.activity_starting_page);
         Button startbutton = findViewById(R.id.startBtn);
         Button editbutton = findViewById(R.id.editBtn);
+        Button clearbutton = findViewById(R.id.clearBtn);
 
         // Attempt to load the QuizState from a file.
         File file = new File(this.getFilesDir(), "quizzes");
@@ -51,6 +52,7 @@ public class StartingPage extends AppCompatActivity {
                 if (state.is_at_end()) {
                     Toast.makeText(v.getContext(), "There are no questions in the quiz.", Toast.LENGTH_SHORT).show();
                 } else {
+                    state.init_for_taking();
                     state.into_intent(start_quiz, QuestionActivity.KEY_EXTRA);
                     v.getContext().startActivity(start_quiz);
                 }
@@ -62,6 +64,16 @@ public class StartingPage extends AppCompatActivity {
             public void onClick(View v) {
                 state.init_for_editing();
 
+                state.into_intent(edit_quiz, EditQuestionActivity.KEY_EXTRA);
+                v.getContext().startActivity(edit_quiz);
+            }
+        });
+
+        clearbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QuizState new_state = new QuizState();
+                new_state.init_for_editing();
                 state.into_intent(edit_quiz, EditQuestionActivity.KEY_EXTRA);
                 v.getContext().startActivity(edit_quiz);
             }

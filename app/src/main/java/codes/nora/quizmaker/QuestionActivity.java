@@ -33,7 +33,7 @@ public class QuestionActivity extends AppCompatActivity {
         this.questionText = findViewById(R.id.question_info);
         this.questionScore = findViewById(R.id.score_txt);
         this.answerEditText = findViewById(R.id.answerEditText);
-        this.answerRadioGroup = findViewById(R.id.radioGroup);
+        this.answerRadioGroup = findViewById(R.id.typeRadioGroup);
 
         s = QuizState.from_intent(getIntent(), KEY_EXTRA);
         final Question q = s.current_question();

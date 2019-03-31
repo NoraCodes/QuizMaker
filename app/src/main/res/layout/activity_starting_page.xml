@@ -8,35 +8,43 @@
 
         <TextView
             android:id="@+id/startPageText"
-            android:text="@string/start_page_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/start_page_text"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/startBtn"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/startBtn"
             android:layout_width="349dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="31dp"
-            android:layout_marginTop="341dp"
+            android:layout_marginTop="8dp"
             android:text="@string/start_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/startPageText" />
+
+        <Button
+            android:id="@+id/clearBtn"
+            android:layout_width="349dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Clear the Quiz!"
+            app:layout_constraintEnd_toEndOf="@+id/editBtn"
+            app:layout_constraintStart_toStartOf="@+id/editBtn"
+            app:layout_constraintTop_toBottomOf="@+id/editBtn" />
 
         <Button
             android:id="@+id/editBtn"
             android:layout_width="349dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="416dp"
+            android:layout_marginTop="8dp"
             android:text="@string/edit_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/startBtn" />
 
 </android.support.constraint.ConstraintLayout>

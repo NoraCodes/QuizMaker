@@ -2,6 +2,7 @@ package codes.nora.quizmaker;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,7 +27,15 @@ public class QuizState implements Serializable {
      */
     public Answer[] answers;
 
-    public QuizState() {}
+    public QuizState() {
+        this.questions = new ArrayList<>();
+        Question q = new Question("Question 1", "This sentence is false.", true, 0.5);
+        q.add_answer("a", 0);
+        q.add_answer("d", 0);
+        q.add_answer("b", 0);
+
+        questions.add(q);
+    }
 
     /**
      * Create a new QuizState for a quiz with the given questions.
@@ -34,7 +43,6 @@ public class QuizState implements Serializable {
      */
     public QuizState(ArrayList<Question> questions) {
         this.questions = questions;
-        this.answers = new Answer[questions.size()];
     }
 
     public void init_for_editing() {
@@ -46,6 +54,11 @@ public class QuizState implements Serializable {
             this.questions.add(new Question("", ""));
         }
 
+        this.current_question_number = 0;
+    }
+
+    public void init_for_taking() {
+        this.answers = new Answer[this.questions.size()];
         this.current_question_number = 0;
     }
 
@@ -109,11 +122,23 @@ public class QuizState implements Serializable {
      */
     public void backtrack() {
         // Preemptively check if we are off the beginning of the array
+        if (questions == null || current_question_number == 0) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        if (answers != null) {
+            answers[current_question_number] = null;
+        }
+        current_question_number -= 1;
+    }
+
+    public void skip() {
         if (questions == null || current_question_number >= questions.size()) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        answers[current_question_number] = null;
-        current_question_number -= 1;
+        if (answers != null) {
+            answers[current_question_number] = null;
+        }
+        current_question_number += 1;
     }
 
     /**
@@ -189,6 +214,7 @@ public class QuizState implements Serializable {
             ObjectInputStream i = new ObjectInputStream(f);
             return (QuizState) i.readObject();
         } catch (Exception e) {
+            Log.e("QuizState deser", e.getMessage());
             return null;
         }
     }
@@ -196,5 +222,9 @@ public class QuizState implements Serializable {
     public void to_stream(FileOutputStream f) throws IOException {
         ObjectOutputStream o = new ObjectOutputStream(f);
         o.writeObject(this);
+    }
+
+    public void swap_question(Question q) {
+        questions.set(current_question_number, q);
     }
 }
