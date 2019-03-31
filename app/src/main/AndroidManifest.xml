@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".StartingPage"
-            android:label="@string/title_activity_starting_page">
+            android:label="QuizMaker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

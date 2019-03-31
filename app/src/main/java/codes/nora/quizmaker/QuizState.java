@@ -30,10 +30,6 @@ public class QuizState implements Serializable {
     public QuizState() {
         this.questions = new ArrayList<>();
         Question q = new Question("Question 1", "This sentence is false.", true, 0.5);
-        q.add_answer("a", 0);
-        q.add_answer("d", 0);
-        q.add_answer("b", 0);
-
         questions.add(q);
     }
 
