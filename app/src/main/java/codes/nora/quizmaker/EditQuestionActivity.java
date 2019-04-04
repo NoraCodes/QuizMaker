@@ -116,6 +116,9 @@ public class EditQuestionActivity extends AppCompatActivity {
 
     private Question questionFromUI() {
         Question q = new Question(titleEditText.getText().toString(), questionEditText.getText().toString());
+        if (typeRadioGroup.getCheckedRadioButtonId() == R.id.shortAnswerRadioButton) {
+            q.set_free_response();
+        }
         for (int i = 0; i < answerEditTexts.size(); i++) {
             String answer_text = answerEditTexts.get(i).getText().toString();
             double answer_value;
