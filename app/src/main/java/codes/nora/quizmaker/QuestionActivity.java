@@ -57,7 +57,7 @@ public class QuestionActivity extends AppCompatActivity {
             }
         }
 
-        if (s.is_at_end()) {
+        if (s.atEnd()) {
             Intent i = new Intent(v.getContext(), EndPage.class);
             s.into_intent(i, EndPage.KEY_EXTRA);
             v.getContext().startActivity(i);
@@ -70,7 +70,7 @@ public class QuestionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (s.is_at_start()) {
+        if (s.atStart()) {
             Intent i = new Intent(this, StartingPage.class);
             s.into_intent(i, StartingPage.KEY_EXTRA);
             startActivity(i);

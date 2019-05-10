@@ -46,10 +46,10 @@ public class StartingPage extends AppCompatActivity {
     }
 
     public void onClickStart(View v) {
-        if (state.is_at_end()) {
+        if (state.atEnd()) {
             Toast.makeText(v.getContext(), "There are no questions in the quiz.", Toast.LENGTH_SHORT).show();
         } else {
-            state.init_for_taking();
+            state.initForTaking();
             final Intent start_quiz = new Intent(this, QuestionActivity.class);
             state.into_intent(start_quiz, QuestionActivity.KEY_EXTRA);
             v.getContext().startActivity(start_quiz);
@@ -57,7 +57,7 @@ public class StartingPage extends AppCompatActivity {
     }
 
     public void onClickEdit(View v) {
-        state.init_for_editing();
+        state.initForEditing();
         Intent edit_quiz = new Intent(this, EditQuestionActivity.class);
         state.into_intent(edit_quiz, EditQuestionActivity.KEY_EXTRA);
         v.getContext().startActivity(edit_quiz);

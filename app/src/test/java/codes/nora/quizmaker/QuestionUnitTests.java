@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 /**
  * Validation tests for the programmatic question creation API.
  */
@@ -13,7 +11,7 @@ public class QuestionUnitTests {
     @Test
     public void new_is_at_end() {
         QuizState s = new QuizState();
-        assert(s.is_at_end());
+        assert(s.atEnd());
     }
 
     @Test
@@ -49,7 +47,7 @@ public class QuestionUnitTests {
 
         // Start a new quiz with the questions made above.
         QuizState s = new QuizState(questions);
-        assert(!s.is_at_end());
+        assert(!s.atEnd());
         assert(s.answers[0] == null);
         assert(s.answers[1] == null);
 
@@ -57,7 +55,7 @@ public class QuestionUnitTests {
         Question tq1 = s.current_question();
         assert(tq1.equals(q1));
         Answer a1 = s.submit_answer("right answer!");
-        assert(!s.is_at_end());
+        assert(!s.atEnd());
         assert(s.answers[0].text.equals("Right answer!"));
         assert(s.answers[0].score == 1.0);
         assert(a1.equals(s.answers[0]));
@@ -66,7 +64,7 @@ public class QuestionUnitTests {
         Question tq2 = s.current_question();
         assert(tq2.equals(q2));
         Answer a2 = s.submit_answer("Partial Credit.");
-        assert(s.is_at_end());
+        assert(s.atEnd());
         assert(a2.equals(s.answers[1]));
     }
 

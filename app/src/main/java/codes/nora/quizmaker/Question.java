@@ -19,12 +19,12 @@ public class Question implements Serializable {
         return answers;
     }
 
-    public double getMax_score() {
-        return max_score;
+    public double getMaxScore() {
+        return maxScore;
     }
 
-    public boolean isIs_free_response() {
-        return is_free_response;
+    public boolean isFreeResponse() {
+        return isFreeResponse;
     }
 
     public void setTitle(String title) {
@@ -39,19 +39,19 @@ public class Question implements Serializable {
         this.answers = answers;
     }
 
-    public void setMax_score(double max_score) {
-        this.max_score = max_score;
+    public void setMaxScore(double maxScore) {
+        this.maxScore = maxScore;
     }
 
-    public void setIs_free_response(boolean is_free_response) {
-        this.is_free_response = is_free_response;
+    public void setFreeResponse(boolean freeResponse) {
+        this.isFreeResponse = freeResponse;
     }
 
     public String title = "";
     public String description = "";
     public ArrayList<Answer> answers = new ArrayList<Answer>();
-    public double max_score = 0;
-    public boolean is_free_response = false;
+    public double maxScore = 0;
+    public boolean isFreeResponse = false;
 
     public Question() {}
 
@@ -97,7 +97,7 @@ public class Question implements Serializable {
      * Set this question as a free response question.
      */
     public void set_free_response() {
-        this.is_free_response = true;
+        this.isFreeResponse = true;
     }
 
     /**
@@ -105,7 +105,7 @@ public class Question implements Serializable {
      * @return true if it is free response and false if not
      */
     public boolean is_free_response() {
-        return this.is_free_response;
+        return this.isFreeResponse;
     }
 
     /**
@@ -115,8 +115,8 @@ public class Question implements Serializable {
      */
     public void add_answer(Answer answer) {
         this.answers.add(answer);
-        if (answer.score > this.max_score) {
-            this.max_score = answer.score;
+        if (answer.score > this.maxScore) {
+            this.maxScore = answer.score;
         }
     }
 

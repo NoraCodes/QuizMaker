@@ -1,6 +1,5 @@
 package codes.nora.quizmaker;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -65,7 +64,7 @@ public class EditQuestionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 QuizState new_state = new QuizState(s.code);
-                new_state.init_for_editing();
+                new_state.initForEditing();
 
             }
         });
@@ -75,7 +74,7 @@ public class EditQuestionActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         saveQuestionState();
-        if (s.is_at_start()) {
+        if (s.atStart()) {
             if (writeQuizState()) {
                 Intent i = new Intent(this, StartingPage.class);
                 s.into_intent(i, StartingPage.KEY_EXTRA);
@@ -120,10 +119,10 @@ public class EditQuestionActivity extends AppCompatActivity {
             addAnswerToView(a.text, a.score);
         }
 
-        if (s.is_at_end()) {
+        if (s.atEnd()) {
             nextButton.setText("New Question");
         }
-        if (s.is_at_start()) {
+        if (s.atStart()) {
             prevButton.setText("Save & Exit");
         }
     }
@@ -151,7 +150,6 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     private boolean writeQuizState() {
-        s.prune_empty_questions();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference rootReference = db.getReference();
         rootReference.child("quizzes").child(s.code).setValue(s);

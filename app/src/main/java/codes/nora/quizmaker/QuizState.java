@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseReference;
  * Represents the state of a quiz in progress.
  */
 public class QuizState implements Serializable {
-    public int current_question_number = 0;
+    public int currentQuestionNumber = 0;
     /**
      * The questions for the quiz being tracked.
      */
@@ -61,8 +61,8 @@ public class QuizState implements Serializable {
         return a;
     }
 
-    public int getCurrent_question_number() {
-        return current_question_number;
+    public int getCurrentQuestionNumber() {
+        return currentQuestionNumber;
     }
 
     /**
@@ -73,7 +73,7 @@ public class QuizState implements Serializable {
         this.questions = questions;
     }
 
-    public void init_for_editing() {
+    public void initForEditing() {
         if (this.questions == null) {
             this.questions = new ArrayList<Question>();
         }
@@ -82,13 +82,13 @@ public class QuizState implements Serializable {
             this.questions.add(new Question("", ""));
         }
 
-        this.current_question_number = 0;
+        this.currentQuestionNumber = 0;
         this.editingMode = true;
     }
 
-    public void init_for_taking() {
+    public void initForTaking() {
         this.answers = new Answer[this.questions.size()];
-        this.current_question_number = 0;
+        this.currentQuestionNumber = 0;
         this.editingMode = false;
     }
 
@@ -136,21 +136,21 @@ public class QuizState implements Serializable {
             return null;
         }
         // Preemptively check if we are off the end of the array
-        if (questions == null || current_question_number >= questions.size()) {
+        if (questions == null || currentQuestionNumber >= questions.size()) {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        Question current_question = questions.get(current_question_number);
+        Question current_question = questions.get(currentQuestionNumber);
 
         if (current_question == null) {
             throw new ArrayIndexOutOfBoundsException();
         } else if (answer == null) {
-            current_question_number += 1;
+            currentQuestionNumber += 1;
             return null;
         } else {
             Answer a = current_question.check_answer(answer);
-            answers[current_question_number] = a;
-            current_question_number += 1;
+            answers[currentQuestionNumber] = a;
+            currentQuestionNumber += 1;
             return a;
         }
     }
@@ -162,23 +162,23 @@ public class QuizState implements Serializable {
      */
     public void backtrack() {
         // Preemptively check if we are off the beginning of the array
-        if (questions == null || current_question_number == 0) {
+        if (questions == null || currentQuestionNumber == 0) {
             throw new ArrayIndexOutOfBoundsException();
         }
         if (!this.editingMode && answers != null) {
-            answers[current_question_number] = null;
+            answers[currentQuestionNumber] = null;
         }
-        current_question_number -= 1;
+        currentQuestionNumber -= 1;
     }
 
     public void skip() {
-        if (is_at_end()) {
+        if (atEnd()) {
             throw new ArrayIndexOutOfBoundsException();
         }
         if (!this.editingMode && answers != null) {
-            answers[current_question_number] = null;
+            answers[currentQuestionNumber] = null;
         }
-        current_question_number += 1;
+        currentQuestionNumber += 1;
     }
 
     /**
@@ -186,8 +186,8 @@ public class QuizState implements Serializable {
      * be answered.
      */
     public Question current_question() {
-        if (!is_at_end()) {
-            return questions.get(current_question_number);
+        if (!atEnd()) {
+            return questions.get(currentQuestionNumber);
         } else {
             return null;
         }
@@ -197,27 +197,17 @@ public class QuizState implements Serializable {
      * Check whether the quiz is over or not.
      * @return true if there are no more questions to be answered, false if there are
      */
-    public boolean is_at_end() {
-        return questions == null || current_question_number >= (questions.size() - 1);
+    public boolean atEnd() {
+        return questions == null || currentQuestionNumber >= (questions.size() - 1);
     }
 
     /**
      * Check whether the quiz is at the beginning or not.
      * @return true if there are no questions prior to this one
      */
-    public boolean is_at_start() {
-        return questions == null || current_question_number == 0;
+    public boolean atStart() {
+        return questions == null || currentQuestionNumber == 0;
     }
-
-    /**
-     * Save this QuizState into a Bundle.
-     * @param b the Bundle to use
-     * @param key the key to save into
-     */
-    public void into_bundle(Bundle b, String key) {
-        b.putSerializable(key, this);
-    }
-
     /**
      * Save this QuizState into an Intent.
      * @param i the Intent to use
@@ -225,17 +215,6 @@ public class QuizState implements Serializable {
      */
     public void into_intent(Intent i, String key) {
         i.putExtra(key, this);
-    }
-
-    /**
-     * Reconstruct a QuizState from a Bundle.
-     * @param b the bundle to use
-     * @param k the key to reconstitute from
-     * @return The reconstructed QuizState or null if no QuizState was saved
-     * into the bundle
-     */
-    public static QuizState from_bundle(Bundle b, String k) {
-        return (QuizState) b.getSerializable(k);
     }
 
     /**
@@ -249,34 +228,7 @@ public class QuizState implements Serializable {
         return (QuizState) i.getSerializableExtra(k);
     }
 
-    public static QuizState from_stream(FileInputStream f) {
-        try {
-            ObjectInputStream i = new ObjectInputStream(f);
-            return (QuizState) i.readObject();
-        } catch (Exception e) {
-            Log.e("QuizState deser", e.getMessage());
-            return null;
-        }
-    }
-
-    public void to_stream(FileOutputStream f) throws IOException {
-        ObjectOutputStream o = new ObjectOutputStream(f);
-        o.writeObject(this);
-    }
-
     public void swap_question(Question q) {
-        questions.set(current_question_number, q);
-    }
-
-    public void prune_empty_questions() {
-        if (editingMode) {
-            ArrayList<Question> toRemove = new ArrayList<>();
-            for (Question q: questions) {
-                if ((q.answers == null || q.answers.isEmpty()) && q.title.isEmpty() && q.description.isEmpty()) {
-                    toRemove.add(q);
-                }
-            }
-            questions.removeAll(toRemove);
-        }
+        questions.set(currentQuestionNumber, q);
     }
 }
