@@ -27,6 +27,26 @@ public class Question implements Serializable {
         return is_free_response;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAnswers(ArrayList<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public void setMax_score(double max_score) {
+        this.max_score = max_score;
+    }
+
+    public void setIs_free_response(boolean is_free_response) {
+        this.is_free_response = is_free_response;
+    }
+
     public String title = "";
     public String description = "";
     public ArrayList<Answer> answers = new ArrayList<Answer>();

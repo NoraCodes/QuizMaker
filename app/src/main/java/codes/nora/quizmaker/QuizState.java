@@ -32,6 +32,8 @@ public class QuizState implements Serializable {
 
     public String code;
 
+    private boolean editingMode = false;
+
     public QuizState() {
         this.code = "";
         this.questions = new ArrayList<>();
@@ -51,8 +53,10 @@ public class QuizState implements Serializable {
 
     public List<Answer> getAnswers() {
         ArrayList<Answer> a = new ArrayList<Answer>();
-        for (Answer ans: answers) {
-            a.add(ans);
+        if (!editingMode && answers != null) {
+            for (Answer ans : answers) {
+                a.add(ans);
+            }
         }
         return a;
     }
@@ -79,12 +83,13 @@ public class QuizState implements Serializable {
         }
 
         this.current_question_number = 0;
-        this.answers = new Answer[1];
+        this.editingMode = true;
     }
 
     public void init_for_taking() {
         this.answers = new Answer[this.questions.size()];
         this.current_question_number = 0;
+        this.editingMode = false;
     }
 
     /**
@@ -92,8 +97,12 @@ public class QuizState implements Serializable {
      */
     public double max_score() {
         double score = 0;
+        if (!editingMode)
         for (Question q: questions) {
-            score += q.best_answer().score;
+            Answer bestAnswer = q.best_answer();
+            if (bestAnswer != null) {
+                score += q.best_answer().score;
+            }
         }
         return score;
     }
@@ -102,6 +111,9 @@ public class QuizState implements Serializable {
      * Compute the current score, counting unanswered questions as zeros.
      */
     public double current_score() {
+        if (this.editingMode || this.answers == null) {
+            return 0;
+        }
         double score = 0;
         for (Answer a: answers) {
             if (a != null) {
@@ -120,6 +132,9 @@ public class QuizState implements Serializable {
      * the end of the answer array.
      */
     public Answer submit_answer(String answer) {
+        if (editingMode || this.answers == null) {
+            return null;
+        }
         // Preemptively check if we are off the end of the array
         if (questions == null || current_question_number >= questions.size()) {
             throw new ArrayIndexOutOfBoundsException();
@@ -150,17 +165,17 @@ public class QuizState implements Serializable {
         if (questions == null || current_question_number == 0) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        if (answers != null) {
+        if (!this.editingMode && answers != null) {
             answers[current_question_number] = null;
         }
         current_question_number -= 1;
     }
 
     public void skip() {
-        if (questions == null || current_question_number >= questions.size()) {
+        if (is_at_end()) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        if (answers != null) {
+        if (!this.editingMode && answers != null) {
             answers[current_question_number] = null;
         }
         current_question_number += 1;
@@ -183,7 +198,7 @@ public class QuizState implements Serializable {
      * @return true if there are no more questions to be answered, false if there are
      */
     public boolean is_at_end() {
-        return questions == null || current_question_number >= questions.size();
+        return questions == null || current_question_number >= (questions.size() - 1);
     }
 
     /**
@@ -253,5 +268,15 @@ public class QuizState implements Serializable {
         questions.set(current_question_number, q);
     }
 
-    public void into_firebase(String identifier,  DatabaseReference db) {}
+    public void prune_empty_questions() {
+        if (editingMode) {
+            ArrayList<Question> toRemove = new ArrayList<>();
+            for (Question q: questions) {
+                if ((q.answers == null || q.answers.isEmpty()) && q.title.isEmpty() && q.description.isEmpty()) {
+                    toRemove.add(q);
+                }
+            }
+            questions.removeAll(toRemove);
+        }
+    }
 }

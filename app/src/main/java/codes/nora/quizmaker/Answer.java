@@ -6,6 +6,14 @@ import java.io.Serializable;
  * The answer to a question and the number of points it is worth.
  */
 public class Answer implements Serializable {
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
     public String text;
     public double score;
 

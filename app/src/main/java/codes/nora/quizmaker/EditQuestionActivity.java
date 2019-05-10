@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -89,15 +90,17 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     public void onNextButton(View v) {
-        if (s.is_at_end()) {
+        try {
+            s.skip();
+        } catch (ArrayIndexOutOfBoundsException e) {
             s.questions.add(new Question("", ""));
+            s.skip();
         }
 
-        s.skip();
+
         Intent i = new Intent(this, EditQuestionActivity.class);
         s.into_intent(i, EditQuestionActivity.KEY_EXTRA);
         startActivity(i);
-
     }
 
     public void onPrevPressed(View v) {
@@ -148,9 +151,11 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     private boolean writeQuizState() {
+        s.prune_empty_questions();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference rootReference = db.getReference();
         rootReference.child("quizzes").child(s.code).setValue(s);
+        Toast.makeText(this, "Wrote quiz to Firebase.", Toast.LENGTH_SHORT).show();
         return true;
     }
 
