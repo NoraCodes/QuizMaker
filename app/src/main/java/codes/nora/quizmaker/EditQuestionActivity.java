@@ -10,13 +10,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,25 +32,38 @@ public class EditQuestionActivity extends AppCompatActivity {
     Button prevButton;
     Button nextButton;
     Button addAnswerButton;
+    Button clearBtn;
     EditText titleEditText;
     EditText questionEditText;
     QuizState s;
     ArrayList<EditText> answerEditTexts;
     ArrayList<EditText> scoreEditTexts;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_question);
+
+
         typeRadioGroup = findViewById(R.id.typeRadioGroup);
         answersView = findViewById(R.id.answersViewLL);
         prevButton = findViewById(R.id.prevQuestionButton);
         nextButton = findViewById(R.id.nextQuestionButton);
         addAnswerButton = findViewById(R.id.addAnswerButton);
+        clearBtn = findViewById(R.id.clear_Btn);
         titleEditText = findViewById(R.id.questionTitleEditText);
         questionEditText = findViewById(R.id.questionTextEditText);
+        final View answerText = findViewById(R.id.answersView);
         answerEditTexts = new ArrayList<>();
         scoreEditTexts = new ArrayList<>();
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference mrootreference = db.getReference();
+        final DatabaseReference mquizreference = mrootreference.child("Quiz");
+        DatabaseReference mquesreference = mquizreference.child("Questions");
+        DatabaseReference mtitlereference = mquesreference.child("Titles");
+        DatabaseReference mtextreference = mquesreference.child("Texts");
+        DatabaseReference manswerreference = mquesreference.child("Answers");
 
         s = QuizState.from_intent(getIntent(), KEY_EXTRA);
         Question q = s.current_question();
@@ -60,7 +73,25 @@ public class EditQuestionActivity extends AppCompatActivity {
             s.questions.add(q);
         }
         populateViewFrom(q);
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QuizState new_state = new QuizState();
+                new_state.init_for_editing();
+
+            }
+        });
+        addAnswerButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                mquizreference.child("Question").child("Title").setValue(titleEditText);
+                mquizreference.child("Question").child("Text").setValue(questionEditText);
+                mquizreference.child("Question").child("Answer").setValue((EditText)answerText);
+            }
+        });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -87,6 +118,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         Intent i = new Intent(this, EditQuestionActivity.class);
         s.into_intent(i, EditQuestionActivity.KEY_EXTRA);
         startActivity(i);
+
     }
 
     public void onPrevPressed(View v) {
@@ -116,9 +148,6 @@ public class EditQuestionActivity extends AppCompatActivity {
 
     private Question questionFromUI() {
         Question q = new Question(titleEditText.getText().toString(), questionEditText.getText().toString());
-        if (typeRadioGroup.getCheckedRadioButtonId() == R.id.shortAnswerRadioButton) {
-            q.set_free_response();
-        }
         for (int i = 0; i < answerEditTexts.size(); i++) {
             String answer_text = answerEditTexts.get(i).getText().toString();
             double answer_value;

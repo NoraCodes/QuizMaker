@@ -1,16 +1,23 @@
 package codes.nora.quizmaker;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class StartingPage extends AppCompatActivity {
     public static final String FILENAME = "saved-quiz";
@@ -19,28 +26,16 @@ public class StartingPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starting_page);
-        Button startbutton = findViewById(R.id.startBtn);
-        Button editbutton = findViewById(R.id.editBtn);
-        Button clearbutton = findViewById(R.id.clearBtn);
+        final TextView loadingText = findViewById(R.id.loadingText);
+        final Button startbutton = findViewById(R.id.startBtn);
+        final Button editbutton = findViewById(R.id.editBtn);
 
-        // Attempt to load the QuizState from a file.
-        File file = new File(this.getFilesDir(), "quizzes");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference mrootreference = db.getReference();
+        final DatabaseReference mquizreference = mrootreference.child("Quiz");
 
-        QuizState temp_state;
-        try {
-            FileInputStream f = openFileInput(FILENAME);
-            temp_state = QuizState.from_stream(f);
-        } catch (FileNotFoundException e) {
-            temp_state = new QuizState();
-        }
-
-        if (temp_state == null) {
-            Toast.makeText(this, "Unable to understand the saved quiz data.", Toast.LENGTH_SHORT).show();
-            temp_state = new QuizState();
-        }
+        final QuizState temp_state = new QuizState();
+        final Context ctx = this.getApplicationContext();
 
         final QuizState state = temp_state;
         final Intent start_quiz = new Intent(this, QuestionActivity.class);
@@ -69,15 +64,22 @@ public class StartingPage extends AppCompatActivity {
             }
         });
 
-        clearbutton.setOnClickListener(new View.OnClickListener() {
+        mquizreference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                QuizState new_state = new QuizState();
-                new_state.init_for_editing();
-                state.into_intent(edit_quiz, EditQuestionActivity.KEY_EXTRA);
-                v.getContext().startActivity(edit_quiz);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                startbutton.setVisibility(View.VISIBLE);
+                startbutton.setEnabled(true);
+                editbutton.setVisibility(View.VISIBLE);
+                editbutton.setEnabled(true);
+                loadingText.setText("");
+                Toast.makeText(ctx, "Read from the Firebase DB.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(ctx, "Read cancelled.", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }
+

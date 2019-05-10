@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1074429892427",
+    "firebase_url": "https://fir-quiz-final.firebaseio.com",
+    "project_id": "fir-quiz-final",
+    "storage_bucket": "fir-quiz-final.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074429892427:android:f829abdd622e1f7f",
+        "android_client_info": {
+          "package_name": "codes.nora.quizmaker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074429892427-e5nu38g60pkf64rshlo86c238ks59m7g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "codes.nora.quizmaker",
+            "certificate_hash": "420ee2133710b8b21cde68f2fa693c2e291429cd"
+          }
+        },
+        {
+          "client_id": "1074429892427-s20q9t8ankvjmhpjnqkvga0m1i4h23cr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBETK3RIUuaWxO2f5CTcRZ2JVeDAGac5qI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074429892427-s20q9t8ankvjmhpjnqkvga0m1i4h23cr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
