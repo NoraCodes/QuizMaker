@@ -28,4 +28,12 @@ public class Answer implements Serializable {
         this.text = text;
         this.score = score;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public double getScore() {
+        return score;
+    }
 }

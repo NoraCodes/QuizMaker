@@ -7,11 +7,31 @@ import java.util.ArrayList;
  * Represents an answerable question.
  */
 public class Question implements Serializable {
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public ArrayList<Answer> getAnswers() {
+        return answers;
+    }
+
+    public double getMax_score() {
+        return max_score;
+    }
+
+    public boolean isIs_free_response() {
+        return is_free_response;
+    }
+
     public String title = "";
     public String description = "";
     public ArrayList<Answer> answers = new ArrayList<Answer>();
-    private double max_score = 0;
-    private boolean is_free_response = false;
+    public double max_score = 0;
+    public boolean is_free_response = false;
 
     /**
      * Create a new Question with the given title and description.

@@ -24,6 +24,7 @@ import org.w3c.dom.Text;
 
 public class StartingPage extends AppCompatActivity {
     public static final String FILENAME = "saved-quiz";
+    public static final String KEY_EXTRA = "codes.nora.quizmaker.QUESTION_DATA";
     TextView loadingText;
     Button startButton;
     Button editButton;
@@ -38,6 +39,17 @@ public class StartingPage extends AppCompatActivity {
         startButton = findViewById(R.id.startBtn);
         editButton = findViewById(R.id.editBtn);
         quizCodeEditText = findViewById(R.id.quizCode);
+
+        state = QuizState.from_intent(getIntent(), KEY_EXTRA);
+        if (state != null) {
+            loadingText.setText(state.code);
+            quizCodeEditText.setText(state.code);
+            loadingText.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            startButton.setVisibility(View.VISIBLE);
+            editButton.setEnabled(true);
+            startButton.setEnabled(true);
+        }
     }
 
     public void onClickStart(View v) {
@@ -93,11 +105,13 @@ public class StartingPage extends AppCompatActivity {
                 // decide how to get the data, or create it if needed
                 if (data.child("codes").hasChild(userSelectedCode)) {
                     // we'll load the quiz
+                    state = data.child("quizzes").child(userSelectedCode).getValue(QuizState.class);
                     Toast.makeText(ctx, "Loaded the quiz.", Toast.LENGTH_SHORT).show();
                 } else {
                     // create a new quiz
                     data.child("codes").getRef().child(userSelectedCode).setValue("exists");
                     Toast.makeText(ctx, "Created the quiz.", Toast.LENGTH_SHORT).show();
+                    state = new QuizState(userSelectedCode);
                 }
             }
 

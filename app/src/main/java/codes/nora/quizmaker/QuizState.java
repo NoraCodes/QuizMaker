@@ -11,13 +11,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+
 import com.google.firebase.database.DatabaseReference;
 
 /**
  * Represents the state of a quiz in progress.
  */
 public class QuizState implements Serializable {
-    private int current_question_number = 0;
+    public int current_question_number = 0;
     /**
      * The questions for the quiz being tracked.
      */
@@ -28,10 +30,29 @@ public class QuizState implements Serializable {
      */
     public Answer[] answers;
 
-    public QuizState() {
+    public String code;
+
+    public QuizState(String code) {
+        this.code = code;
         this.questions = new ArrayList<>();
         Question q = new Question("Question 1", "This sentence is false.", true, 0.5);
         questions.add(q);
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public List<Answer> getAnswers() {
+        ArrayList<Answer> a = new ArrayList<Answer>();
+        for (Answer ans: answers) {
+            a.add(ans);
+        }
+        return a;
+    }
+
+    public int getCurrent_question_number() {
+        return current_question_number;
     }
 
     /**

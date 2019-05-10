@@ -72,6 +72,7 @@ public class QuestionActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (s.is_at_start()) {
             Intent i = new Intent(this, StartingPage.class);
+            s.into_intent(i, StartingPage.KEY_EXTRA);
             startActivity(i);
         } else {
             s.backtrack();

@@ -72,7 +72,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                QuizState new_state = new QuizState();
+                QuizState new_state = new QuizState(s.code);
                 new_state.init_for_editing();
 
             }
@@ -86,6 +86,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         if (s.is_at_start()) {
             if (writeQuizState()) {
                 Intent i = new Intent(this, StartingPage.class);
+                s.into_intent(i, StartingPage.KEY_EXTRA);
                 startActivity(i);
             }
         } else {
