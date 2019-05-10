@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,64 +20,91 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class StartingPage extends AppCompatActivity {
     public static final String FILENAME = "saved-quiz";
+    TextView loadingText;
+    Button startButton;
+    Button editButton;
+    EditText quizCodeEditText;
+    QuizState state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starting_page);
-        final TextView loadingText = findViewById(R.id.loadingText);
-        final Button startbutton = findViewById(R.id.startBtn);
-        final Button editbutton = findViewById(R.id.editBtn);
+        loadingText = findViewById(R.id.loadingText);
+        startButton = findViewById(R.id.startBtn);
+        editButton = findViewById(R.id.editBtn);
+        quizCodeEditText = findViewById(R.id.quizCode);
+    }
 
+    public void onClickStart(View v) {
+        if (state.is_at_end()) {
+            Toast.makeText(v.getContext(), "There are no questions in the quiz.", Toast.LENGTH_SHORT).show();
+        } else {
+            state.init_for_taking();
+            final Intent start_quiz = new Intent(this, QuestionActivity.class);
+            state.into_intent(start_quiz, QuestionActivity.KEY_EXTRA);
+            v.getContext().startActivity(start_quiz);
+        }
+    }
+
+    public void onClickEdit(View v) {
+        state.init_for_editing();
+        Intent edit_quiz = new Intent(this, EditQuestionActivity.class);
+        state.into_intent(edit_quiz, EditQuestionActivity.KEY_EXTRA);
+        v.getContext().startActivity(edit_quiz);
+    }
+
+    public void onClickLoad(View v) {
+        // Create the query for the FirebaseDatabase, selecting just the list of codes
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference mrootreference = db.getReference();
-        final DatabaseReference mquizreference = mrootreference.child("Quiz");
+        DatabaseReference rootReference = db.getReference();
 
-        final QuizState temp_state = new QuizState();
+        // Twiddle UI bits for the user
+        startButton.setVisibility(View.INVISIBLE);
+        startButton.setEnabled(false);
+        editButton.setVisibility(View.INVISIBLE);
+        editButton.setEnabled(false);
+
+        // Get the code we want to edit or create
+        final String userSelectedCode = quizCodeEditText.getText().toString();
+        if (userSelectedCode.isEmpty()) {
+            Toast.makeText(v.getContext(), "No code provided.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        loadingText.setText("Loading...");
+        loadingText.setVisibility(View.VISIBLE);
+
+
         final Context ctx = this.getApplicationContext();
-
-        final QuizState state = temp_state;
-        final Intent start_quiz = new Intent(this, QuestionActivity.class);
-        final Intent edit_quiz = new Intent(this, EditQuestionActivity.class);
-
-        startbutton.setOnClickListener(new View.OnClickListener() {
+        rootReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                if (state.is_at_end()) {
-                    Toast.makeText(v.getContext(), "There are no questions in the quiz.", Toast.LENGTH_SHORT).show();
+            public void onDataChange(DataSnapshot data) {
+                // Twiddle UI bits for the user
+                startButton.setVisibility(View.VISIBLE);
+                startButton.setEnabled(true);
+                editButton.setVisibility(View.VISIBLE);
+                editButton.setEnabled(true);
+                loadingText.setText(userSelectedCode);
+
+                // decide how to get the data, or create it if needed
+                if (data.child("codes").hasChild(userSelectedCode)) {
+                    // we'll load the quiz
+                    Toast.makeText(ctx, "Loaded the quiz.", Toast.LENGTH_SHORT).show();
                 } else {
-                    state.init_for_taking();
-                    state.into_intent(start_quiz, QuestionActivity.KEY_EXTRA);
-                    v.getContext().startActivity(start_quiz);
+                    // create a new quiz
+                    data.child("codes").getRef().child(userSelectedCode).setValue("exists");
+                    Toast.makeText(ctx, "Created the quiz.", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
-        editbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                state.init_for_editing();
-
-                state.into_intent(edit_quiz, EditQuestionActivity.KEY_EXTRA);
-                v.getContext().startActivity(edit_quiz);
-            }
-        });
-
-        mquizreference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                startbutton.setVisibility(View.VISIBLE);
-                startbutton.setEnabled(true);
-                editbutton.setVisibility(View.VISIBLE);
-                editbutton.setEnabled(true);
-                loadingText.setText("");
-                Toast.makeText(ctx, "Read from the Firebase DB.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                loadingText.setVisibility(View.VISIBLE);
+                loadingText.setText("FAILED");
                 Toast.makeText(ctx, "Read cancelled.", Toast.LENGTH_SHORT).show();
             }
         });

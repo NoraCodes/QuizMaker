@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * Represents the state of a quiz in progress.
@@ -223,4 +224,6 @@ public class QuizState implements Serializable {
     public void swap_question(Question q) {
         questions.set(current_question_number, q);
     }
+
+    public void into_firebase(String identifier,  DatabaseReference db) {}
 }

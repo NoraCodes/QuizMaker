@@ -59,11 +59,7 @@ public class EditQuestionActivity extends AppCompatActivity {
         scoreEditTexts = new ArrayList<>();
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference mrootreference = db.getReference();
-        final DatabaseReference mquizreference = mrootreference.child("Quiz");
-        DatabaseReference mquesreference = mquizreference.child("Questions");
-        DatabaseReference mtitlereference = mquesreference.child("Titles");
-        DatabaseReference mtextreference = mquesreference.child("Texts");
-        DatabaseReference manswerreference = mquesreference.child("Answers");
+        final DatabaseReference codesReference = mrootreference.child("codes");
 
         s = QuizState.from_intent(getIntent(), KEY_EXTRA);
         Question q = s.current_question();
@@ -79,15 +75,6 @@ public class EditQuestionActivity extends AppCompatActivity {
                 QuizState new_state = new QuizState();
                 new_state.init_for_editing();
 
-            }
-        });
-        addAnswerButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                mquizreference.child("Question").child("Title").setValue(titleEditText);
-                mquizreference.child("Question").child("Text").setValue(questionEditText);
-                mquizreference.child("Question").child("Answer").setValue((EditText)answerText);
             }
         });
     }

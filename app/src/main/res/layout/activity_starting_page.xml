@@ -45,12 +45,38 @@
             android:id="@+id/loadingText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="8dp"
             android:text="Loading..."
             android:textSize="32sp"
-            app:layout_constraintBottom_toTopOf="@+id/startPageText"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/quizCode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/quizCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
+            android:ems="10"
+            android:hint="Quiz Code"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/startPageText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.181"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/loadButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="onClickLoad"
+            android:text="Load"
+            app:layout_constraintBottom_toBottomOf="@+id/quizCode"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/quizCode"
+            app:layout_constraintTop_toTopOf="@+id/quizCode" />
 
 </android.support.constraint.ConstraintLayout>
