@@ -10,20 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 public class StartingPage extends AppCompatActivity {
-    public static final String FILENAME = "saved-quiz";
     public static final String KEY_EXTRA = "codes.nora.quizmaker.QUESTION_DATA";
     TextView loadingText;
     Button startButton;

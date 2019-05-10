@@ -11,21 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
 public class EditQuestionActivity extends AppCompatActivity {
     public static final String KEY_EXTRA = "codes.nora.quizmaker.QUESTION_DATA";
-    public static final String FILENAME = StartingPage.FILENAME;
 
     RadioGroup typeRadioGroup;
     LinearLayout answersView;
@@ -57,9 +51,6 @@ public class EditQuestionActivity extends AppCompatActivity {
         final View answerText = findViewById(R.id.answersView);
         answerEditTexts = new ArrayList<>();
         scoreEditTexts = new ArrayList<>();
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference mrootreference = db.getReference();
-        final DatabaseReference codesReference = mrootreference.child("codes");
 
         s = QuizState.from_intent(getIntent(), KEY_EXTRA);
         Question q = s.current_question();
@@ -157,22 +148,10 @@ public class EditQuestionActivity extends AppCompatActivity {
     }
 
     private boolean writeQuizState() {
-// Attempt to load the QuizState from a file.
-        File file = new File(this.getFilesDir(), "quizzes");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        try {
-            FileOutputStream f = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            s.to_stream(f);
-            return true;
-        } catch (FileNotFoundException e) {
-            Toast.makeText(this, "Unable to open quiz data file.", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Toast.makeText(this, "Unable to write to quiz data file.", Toast.LENGTH_SHORT).show();
-        }
-        return false;
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference rootReference = db.getReference();
+        rootReference.child("quizzes").child(s.code).setValue(s);
+        return true;
     }
 
     public void onAddAnswer(View v) {

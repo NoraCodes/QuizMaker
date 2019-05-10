@@ -79,6 +79,7 @@ public class QuizState implements Serializable {
         }
 
         this.current_question_number = 0;
+        this.answers = new Answer[1];
     }
 
     public void init_for_taking() {
