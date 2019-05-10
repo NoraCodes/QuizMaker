@@ -32,8 +32,14 @@ public class QuizState implements Serializable {
 
     public String code;
 
+    public QuizState() {
+        this.code = "";
+        this.questions = new ArrayList<>();
+    }
+
     public QuizState(String code) {
         this.code = code;
+        this.answers = new Answer[1];
         this.questions = new ArrayList<>();
         Question q = new Question("Question 1", "This sentence is false.", true, 0.5);
         questions.add(q);

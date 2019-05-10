@@ -103,15 +103,15 @@ public class StartingPage extends AppCompatActivity {
                 loadingText.setText(userSelectedCode);
 
                 // decide how to get the data, or create it if needed
-                if (data.child("codes").hasChild(userSelectedCode)) {
+                if (data.child("quizzes").hasChild(userSelectedCode)) {
                     // we'll load the quiz
                     state = data.child("quizzes").child(userSelectedCode).getValue(QuizState.class);
                     Toast.makeText(ctx, "Loaded the quiz.", Toast.LENGTH_SHORT).show();
                 } else {
                     // create a new quiz
-                    data.child("codes").getRef().child(userSelectedCode).setValue("exists");
-                    Toast.makeText(ctx, "Created the quiz.", Toast.LENGTH_SHORT).show();
                     state = new QuizState(userSelectedCode);
+                    data.child("quizzes").getRef().child(userSelectedCode).setValue(state);
+                    Toast.makeText(ctx, "Created the quiz.", Toast.LENGTH_SHORT).show();
                 }
             }
 

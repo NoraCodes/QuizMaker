@@ -9,6 +9,11 @@ public class Answer implements Serializable {
     public String text;
     public double score;
 
+    public Answer() {
+        text = "";
+        score = 0;
+    }
+
     /**
      * Create a wrong answer with the given text. This Answer is wrong and thus
      * has a score of zero.

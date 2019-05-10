@@ -33,6 +33,8 @@ public class Question implements Serializable {
     public double max_score = 0;
     public boolean is_free_response = false;
 
+    public Question() {}
+
     /**
      * Create a new Question with the given title and description.
      * @param title the question's title
